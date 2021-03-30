@@ -36,3 +36,7 @@ TODO
 ## Screenshots
 
 TODO
+
+## CREDITS
+
+LuckyX182 / TODO
