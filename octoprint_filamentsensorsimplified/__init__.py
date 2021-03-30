@@ -365,10 +365,11 @@ class Filament_sensor_simplifiedPlugin(octoprint.plugin.StartupPlugin,
 						else:
 							self.turnOffDetection(event)
 							self.detectionOn = True
-							GPIO.add_event_detect(
-								self.pin, GPIO.FALLING,
-								callback=self.sensor_callback,
-								bouncetime=self.bounce_time)
+							# TODO USB Version of below
+							# GPIO.add_event_detect(
+							# 	self.pin, GPIO.FALLING,
+							# 	callback=self.sensor_callback,
+							# 	bouncetime=self.bounce_time)
 
 					# print started with no filament present
 					if self.no_filament():
@@ -405,7 +406,8 @@ class Filament_sensor_simplifiedPlugin(octoprint.plugin.StartupPlugin,
 		if self.detectionOn:
 			self._logger.info("%s: Disabling filament sensor." % (event))
 			self.detectionOn = False
-			GPIO.remove_event_detect(self.pin)
+			# TODO implement own version of below
+			# GPIO.remove_event_detect(self.pin)
 
 	def sensor_callback(self, _):
 		trigger = True
@@ -435,17 +437,17 @@ class Filament_sensor_simplifiedPlugin(octoprint.plugin.StartupPlugin,
 		# for details.
 		return dict(
 			filamentsensorsimplified=dict(
-				displayName="Filament sensor simplified",
+				displayName="Filament sensor USB",
 				displayVersion=self._plugin_version,
 
 				# version check: github repository
 				type="github_release",
-				user="luckyx182",
-				repo="Filament_sensor_simplified",
+				user="dmattox10",
+				repo="Filament_sensor_USB",
 				current=self._plugin_version,
 
 				# update method: pip
-				pip="https://github.com/luckyx182/Filament_sensor_simplified/archive/{target_version}.zip"
+				pip="https://github.com/dmattox10/Filament_sensor_USB/archive/{target_version}.zip"
 			)
 		)
 
@@ -457,15 +459,15 @@ class Filament_sensor_simplifiedPlugin(octoprint.plugin.StartupPlugin,
 # __plugin_pythoncompat__ = ">=3,<4" # only python 3
 __plugin_pythoncompat__ = ">=2.7,<4"  # python 2 and 3
 
-__plugin_name__ = "Filament Sensor Simplified"
+__plugin_name__ = "Filament Sensor USB"
 __plugin_version__ = "0.1.0"
 
 
 def __plugin_check__():
 	try:
-		import RPi.GPIO as GPIO
-		if GPIO.VERSION < "0.6":  # Need at least 0.6 for edge detection
-			return False
+		import serial as serial
+		# if GPIO.VERSION < "0.6":  # Need at least 0.6 for edge detection
+		# 	return False
 	except ImportError:
 		return False
 	return True
@@ -473,7 +475,7 @@ def __plugin_check__():
 
 def __plugin_load__():
 	global __plugin_implementation__
-	__plugin_implementation__ = Filament_sensor_simplifiedPlugin()
+	__plugin_implementation__ = Filament_sensor_USBPlugin()
 
 	global __plugin_hooks__
 	__plugin_hooks__ = {
